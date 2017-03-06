@@ -1,0 +1,29 @@
+{
+  "name": "javascript-nest-kata-server",
+  "version": "0.0.1",
+  "description": "A server app to play with katas, yourself or against an oponent",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/semagarcia/javascript-nest-kata-server.git"
+  },
+  "keywords": [
+    "javascript",
+    "js",
+    "kata",
+    "server",
+    "nest"
+  ],
+  "author": "Sema García",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/semagarcia/javascript-nest-kata-server/issues"
+  },
+  "homepage": "https://github.com/semagarcia/javascript-nest-kata-server#readme",
+  "dependencies": {
+    "nest": "^0.1.6"
+  }
+}
