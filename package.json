@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/semagarcia/javascript-nest-kata-server#readme",
   "dependencies": {
+    "body-parser": "^1.17.1",
     "nest.js": "^1.0.0-alpha-14",
     "ts-node": "^2.1.0",
     "typescript": "^2.2.1"
