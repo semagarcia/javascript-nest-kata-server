@@ -4,6 +4,9 @@
   "description": "A server app to play with katas, yourself or against an oponent",
   "main": "index.js",
   "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./index.ts",
+    "compile": "tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,6 +27,12 @@
   },
   "homepage": "https://github.com/semagarcia/javascript-nest-kata-server#readme",
   "dependencies": {
-    "nest": "^0.1.6"
+    "nest.js": "^1.0.0-alpha-14",
+    "ts-node": "^2.1.0",
+    "typescript": "^2.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.5",
+    "nodemon": "^1.11.0"
   }
 }
