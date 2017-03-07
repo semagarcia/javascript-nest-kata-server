@@ -1,11 +1,10 @@
 import { Module } from 'nest.js';
 import { LoginController } from './login.controller';
+import { LoginService } from './login.component';
 
 @Module({
     controllers: [ LoginController ],
-    /*modules: [ SharedModule ],
-    controllers: [ UsersController ],
-    components: [ UsersService ],
-    exports: [ UsersService ],*/
+    components: [ LoginService ],
+    exports: [ LoginService ]
 })
 export class LoginModule {}
