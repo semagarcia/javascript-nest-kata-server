@@ -16,7 +16,7 @@ export class LoginService {
         return new Promise(async(resolve, reject) => {       
             // Read and update the man file
             var fs = require('fs');
-            var someFile = './katas/ej0/ej.js';
+            var someFile = './katas/addTwoNumbers/ej.js';
             fs.readFile(someFile, 'utf8', function (err, data) {
                 if (err) {
                     return console.log(err);
@@ -28,7 +28,7 @@ export class LoginService {
 
                     // Execute test
                     var spawn = require('child_process').spawn;
-                    var npmTest = spawn('npm', ['test', '--prefix', './katas/ej0']);
+                    var npmTest = spawn('npm', ['test', '--prefix', './katas/addTwoNumbers']);
                     var outputStr = '';
 
                     npmTest.stdout.on('data', function (data) {
