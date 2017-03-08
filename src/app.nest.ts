@@ -1,10 +1,12 @@
 import { NestApplication } from 'nest.js';
 import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
 
 export class Application implements NestApplication {
 
     constructor(private expressApp) {
         this.expressApp.use(bodyParser.json());
+        this.expressApp.use(cors());
     }
 
     start(): void {

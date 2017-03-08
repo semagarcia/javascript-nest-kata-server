@@ -19,10 +19,27 @@ export class LoginController {
         res.status(200).json(login);
     }
 
+    @RequestMapping({ path: 'test', method: RequestMethod.GET })
+    async test(req, res) {
+        console.log('Launching tests...');
+        let test = await this.loginSrv.executeTest(null);
+        console.log('Test result: ', test);
+        res.status(200).json({res:test});
+    }
+
     @RequestMapping({ path: 'test/:id', method: RequestMethod.GET })
     async test3(req, res) {
         console.log('Request to /test/:id con id=' + req.params.id);
         req.status(400).send({error:110093, msg:'Error 110093 - Lorem ipsum...'});
+    }
+
+
+    @RequestMapping({ path: 'kata', method: RequestMethod.POST })
+    async executeKata(req, res) {
+        console.log('Execute test with: ' + req.body.function);
+        let test = await this.loginSrv.executeTest(req.body.function);
+        console.log('Test result: ', test);
+        res.status(200).json({res:test});
     }
 
 }
