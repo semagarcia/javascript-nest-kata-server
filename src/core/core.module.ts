@@ -1,7 +1,8 @@
 import { Module } from 'nest.js';
+import { StreamingGateway } from './streaming.gateway';
 
 @Module({
-    components: [],
-    exports: []
+    components: [ StreamingGateway ],
+    exports: [ StreamingGateway ]
 })
 export class CoreModule {}
