@@ -1,9 +1,10 @@
 import { Module } from 'nest.js';
 import { ChallengesController } from './challenges.controller';
+import { ChallengesService } from './challenges.service';
 
 @Module({
     controllers: [ ChallengesController ],
-    components: [],
-    exports: []
+    components: [ ChallengesService ],
+    exports: [ ChallengesService ]
 })
 export class ChallengesModule {}
