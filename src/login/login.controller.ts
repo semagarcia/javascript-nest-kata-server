@@ -1,15 +1,17 @@
 import { RequestMethod, Controller, RequestMapping } from 'nest.js';
 import { LoginService } from './login.component';
+import { StreamingGateway } from './../core';
 
 @Controller({ path: '' })
 export class LoginController {
 
-    constructor(private loginSrv:LoginService) {}
+    constructor(private loginSrv:LoginService, private streamingSrv:StreamingGateway) {}
 
     @RequestMapping()
     async test1(req, res) {
         console.log('Request to /' );
-        res.send({status:'ok'});
+        //this.streamingSrv.sendMessage('msg', 'User trying to login...');
+        res.send({ status:'ok' });
     }
 
     @RequestMapping({ path: 'login', method: RequestMethod.POST })
