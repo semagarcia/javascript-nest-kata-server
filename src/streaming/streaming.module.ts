@@ -5,4 +5,4 @@ import { Module } from 'nest.js';
     components: [],
     exports: []
 })
-export class SharingModule {}
+export class StreamingModule {}
