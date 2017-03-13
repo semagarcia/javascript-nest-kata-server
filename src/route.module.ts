@@ -1,11 +1,11 @@
-import { Module } from 'nest.js';
+import { Module, MiddlewareBuilder, RequestMethod } from 'nest.js';
 
 import { AdministrationModule } from './administration';
 import { ChallengesModule } from './challenges';
-import { CoreModule } from './core';
+import { CoreModule, CorsMiddleware } from './core';
 import { LoginModule } from './login';
 import { RankingModule } from './ranking';
-import { SharingModule } from './sharing';
+import { StreamingModule } from './streaming';
 import { UserModule } from './user';
 
 @Module({
@@ -15,8 +15,15 @@ import { UserModule } from './user';
         CoreModule,
         LoginModule,
         RankingModule,
-        SharingModule,
+        StreamingModule,
         UserModule
     ]
 })
-export class RootModule {}
+export class RootModule {
+    /*configure(builder: MiddlewareBuilder) {
+        builder.use({
+            middlewares: [ CorsMiddleware ],
+            forRoutes: [ { path: '*', method: RequestMethod.ALL } ]
+        })
+    }*/
+}
