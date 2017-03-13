@@ -37,6 +37,9 @@
   },
   "devDependencies": {
     "@types/node": "^7.0.5",
+    "@types/node-uuid": "0.0.28",
+    "@types/socket.io": "^1.4.28",
+    "node-uuid": "^1.4.7",
     "nodemon": "^1.11.0"
   }
 }
