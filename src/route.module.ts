@@ -6,6 +6,7 @@ import { CoreModule, CorsMiddleware } from './core';
 import { LoginModule } from './login';
 import { RankingModule } from './ranking';
 import { StreamingModule } from './streaming';
+import { TrainingPathsModule } from './training';
 import { UserModule } from './user';
 
 @Module({
@@ -16,6 +17,7 @@ import { UserModule } from './user';
         LoginModule,
         RankingModule,
         StreamingModule,
+        TrainingPathsModule,
         UserModule
     ]
 })
