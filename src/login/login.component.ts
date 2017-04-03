@@ -40,7 +40,10 @@ export class LoginService {
                         // Avoid the two first lines (related to NPM):
                         // Line[0]: addTwoNumbers@1.0.0 test /path/to/katas/exercise
                         // Line[1]: ./node_modules/mocha/bin/mocha ej.test.js
-                        resolve(output.slice(2).join(''));
+                        resolve({
+                            executionResult: code,
+                            output: output.slice(2).join('')
+                        });
                     });
                 });
             });

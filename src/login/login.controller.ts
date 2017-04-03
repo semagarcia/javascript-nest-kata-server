@@ -26,13 +26,13 @@ export class LoginController {
         console.log('Launching tests...');
         let test = await this.loginSrv.executeTest(null);
         console.log('Test result: ', test);
-        res.status(200).json({res:test});
+        res.status(200).json({ result:test });
     }
 
     @RequestMapping({ path: 'test/:id', method: RequestMethod.GET })
     async test3(req, res) {
         console.log('Request to /test/:id con id=' + req.params.id);
-        req.status(400).send({error:110093, msg:'Error 110093 - Lorem ipsum...'});
+        req.status(400).send({ error:110093, msg:'Error 110093 - Lorem ipsum...' });
     }
 
 
@@ -41,7 +41,7 @@ export class LoginController {
         console.log('Execute test with: ' + req.body.function);
         let test = await this.loginSrv.executeTest(req.body.function);
         console.log('Test result: ', test);
-        res.status(200).json({res:test});
+        res.status(200).json({ result:test });
     }
 
 }
