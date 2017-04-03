@@ -1,0 +1,50 @@
+{
+    "basic-types": {
+        "metadata": {
+            "keys": [
+                "kata-bt-1",
+                "kata-bt-2",
+                "kata-bt-3"
+            ]
+        },
+        "exercises": [
+            { 
+                "id": "kata-bt-1", 
+                "name": "addTwoNumbers", 
+                "description": "Given two numbers, you should return the add of both.", 
+                "example": "* For a = 3 and b = 5, the output should be 8.",
+                "fnBodyImpl": "function addTwoNumbers(a, b) {}"
+            },
+            { 
+                "id": "kata-bt-2", 
+                "name": "squaredNumber", 
+                "description": "Given two numbers (base and exponent), calculate and return the a^b without use the math library.", 
+                "example": "* For a = 2 and b = 3, the output should be 8.",
+                "fnBodyImpl": "function squaredNumber(a, b) {}"
+            },
+            { 
+                "id": "kata-bt-3", 
+                "name": "palindrome", 
+                "description": "Given a string, check if it is a palindrome or not.", 
+                "example": "* Form str = 'asdfdsa', the output should be true.",
+                "fnBodyImpl": "function palindrome(str) {}"
+            }
+        ]
+    },
+    "functions": {
+        "metadata": {
+            "keys": [
+                "kata-fn-1"
+            ]
+        },
+        "exercises": [
+            { 
+                "id": "kata-fn-1", 
+                "name": "doubleFunction", 
+                "description": "Given the following function, complete it to return the double of the param passed as argument.", 
+                "example": "* For a = 3, the output should be 6.",
+                "fnBodyImpl": "function doubleFunction(a) {}"
+            }
+        ]
+    }
+}
