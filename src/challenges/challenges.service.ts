@@ -26,12 +26,10 @@ export class ChallengesService {
         let challenge = this.challengesInfo.get(challengeId);
         if(!challenge.playerA && !challenge.playerB) {
             // Nobody has joined into challenge
-            console.log('JoinPlayer :: 0 players => ', playerId);
             challenge.playerA = playerId;
             this.challengesInfo.set(challengeId, challenge);
         } else if(challenge.playerA && !challenge.playerB) {
             // Only playerA has joined into challenge
-            console.log('JoinPlayer :: 1 player => ', playerId);
             challenge.playerB = playerId;
             this.challengesInfo.set(challengeId, challenge);
         } else if(challenge.playerA && challenge.playerB) {

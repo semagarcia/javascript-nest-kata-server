@@ -40,7 +40,6 @@ export class ChallengesController {
     @RequestMapping({ path: 'join', method: RequestMethod.POST })
     async joinToChallengeRoom(req, res) { 
         let challenge = await this.challengeSrv.joinPlayerIntoChallenge(req.body.challengeId, req.body.playerId);
-        console.log('Challenge: ', challenge);
         res.send(challenge);
     }
 
