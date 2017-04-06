@@ -1,6 +1,31 @@
 
 export class TrainingPath {
 
+    metadata: KataMetadata;
+    exercises: Array<KataExercise>;    
+
+}
+
+export interface KataExercise {
+
+    id: string;
+
+    /** */
+    name: string;
+
+    /** */
+    description: string;
+
+    /** */
+    example: string;
+
+    /** */
+    fnBodyImpl: string;
+
+}
+
+export interface KataMetadata {
+
     /** */
     trainingPathId: string;
 
@@ -9,5 +34,8 @@ export class TrainingPath {
 
     /** */
     trainingPathDescription: string;
+
+    /** */
+    trainingPathKeys: Array<string>;
 
 }
