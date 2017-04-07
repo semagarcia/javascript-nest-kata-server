@@ -27,11 +27,25 @@ export class TrainingPathsController {
         res.send({ metadata: metadata });
     }
 
-    // Path: /api/training-paths/metadata/:path/:kataId
-    @RequestMapping({ path: 'metadata/:path/:kataId', method: RequestMethod.GET })
+    // Path: /api/training-paths/metadata/:path
+    @RequestMapping({ path: 'metadata/:path', method: RequestMethod.GET })
     async getMetadataOfTrainingPath(req, res) { 
         let metadata = await this.trainingSrv.getMetadataOfTrainingPath(req.params.path);
         res.send({ metadata: metadata });
+    }
+
+    // Path: /api/training-paths/topic/:path
+    @RequestMapping({ path: 'topic/:topic', method: RequestMethod.GET })
+    async getTrainingPathByTopic(req, res) { 
+        let tPath = await this.trainingSrv.getTrainingPathByTopic(req.params.topic);
+        res.send({ tPath: tPath });
+    }
+
+    // Path: /api/training-paths/exercises/:path
+    @RequestMapping({ path: 'exercises/topic/:topic', method: RequestMethod.GET })
+    async getExercisesByTopic(req, res) { 
+        let exercises = await this.trainingSrv.getExercisesByTopic(req.params.topic);
+        res.send({ exercises: exercises });
     }
 
 }
