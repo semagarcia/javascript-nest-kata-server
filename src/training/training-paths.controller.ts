@@ -6,46 +6,44 @@ export class TrainingPathsController {
 
     constructor(private trainingSrv: TrainingService) {}
 
-    // Path: /api/training-paths
+    /**
+     * Endpoint to retrieve all the training paths (without katas)
+     * Path: /api/training-paths
+     */
     @RequestMapping({ path: '', method: RequestMethod.GET })
     async getTrainingPaths(req, res) { 
-        let trainingPaths = await this.trainingSrv.getTrainingPaths();
+        let trainingPaths = await this.trainingSrv.getTrainingPathsWithoutKatas();
         res.send({ trainingPaths: trainingPaths });
     }
 
-    // Path: /api/training-paths/exercises/:path
-    @RequestMapping({ path: 'exercises/:path', method: RequestMethod.GET })
-    async getExercisesOfTrainingPath(req, res) { 
-        let exercises = await this.trainingSrv.getExercisesOfTrainingPath(req.params.path);
-        res.send({ exercises: exercises });
-    }
-
-    // Path: /api/training-paths/metadata/
-    @RequestMapping({ path: 'metadata', method: RequestMethod.GET })
-    async getAllTrainingPathsMetadata(req, res) { 
-        let metadata = await this.trainingSrv.getAllTrainingPathsMetadata();
-        res.send({ metadata: metadata });
-    }
-
-    // Path: /api/training-paths/metadata/:path
-    @RequestMapping({ path: 'metadata/:path', method: RequestMethod.GET })
-    async getMetadataOfTrainingPath(req, res) { 
-        let metadata = await this.trainingSrv.getMetadataOfTrainingPath(req.params.path);
-        res.send({ metadata: metadata });
-    }
-
-    // Path: /api/training-paths/topic/:path
+    /**
+     * Endpoint to retrieve a training path by its topic
+     * Path: /api/training-paths/topic/:topic
+     */
     @RequestMapping({ path: 'topic/:topic', method: RequestMethod.GET })
     async getTrainingPathByTopic(req, res) { 
         let tPath = await this.trainingSrv.getTrainingPathByTopic(req.params.topic);
         res.send({ tPath: tPath });
     }
 
-    // Path: /api/training-paths/exercises/:path
-    @RequestMapping({ path: 'exercises/topic/:topic', method: RequestMethod.GET })
-    async getExercisesByTopic(req, res) { 
-        let exercises = await this.trainingSrv.getExercisesByTopic(req.params.topic);
-        res.send({ exercises: exercises });
+    /**
+     * Endpoint to retrieve the katas of a training path specified by its topic
+     * Path: /api/training-paths/:topic/katas
+     */
+    @RequestMapping({ path: ':topic/katas', method: RequestMethod.GET })
+    async getExercisesOfTrainingPath(req, res) { 
+        let katas = await this.trainingSrv.getKatasOfTrainingPathByTopic(req.params.topic);
+        res.send({ trainingPath: katas });
+    }
+
+    /**
+     * Endpoint to
+     * Path: /api/training-paths/id/katas/:pathId
+     */
+    @RequestMapping({ path: 'id/katas/:pathId', method: RequestMethod.GET })
+    async getKatasByTrainingPathId(req, res) { 
+        let exercises = await this.trainingSrv.getKatasByTrainingPathId(req.params.pathId);
+        res.send({ katas: exercises });
     }
 
 }
