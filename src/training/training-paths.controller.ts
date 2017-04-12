@@ -17,6 +17,16 @@ export class TrainingPathsController {
     }
 
     /**
+     * Endpoint to retrieve all the training paths to populate the grid (settings)
+     * Path: /api/training-paths/grid
+     */
+    @RequestMapping({ path: '/grid', method: RequestMethod.GET })
+    async getTrainingPathsForGrid(req, res) { 
+        let trainingPaths = await this.trainingSrv.getTrainingPathsForGrid();
+        res.send({ trainingPaths: trainingPaths });
+    }
+
+    /**
      * Endpoint to retrieve a training path by its topic
      * Path: /api/training-paths/topic/:topic
      */

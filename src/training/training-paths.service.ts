@@ -26,6 +26,23 @@ export class TrainingService {
     }
 
     /**
+     * Endpoint to retrieve all the training paths to populate the grid (settings)
+     * Path: /api/training-paths/grid
+     */
+    getTrainingPathsForGrid(): Promise<Array<TrainingPath>> {
+        return new Promise((resolve, reject) => {
+            TrainingPathModel
+                .find('topic name description enabled createdAt updatedAt')
+                .lean()
+                .exec((err, tPaths: Array<any>) => {
+                    if(err) { console.log(err); return reject(err); }
+                    return resolve(tPaths.map((x:any) => { x.katas = x.katas.length; return x; }));
+                }
+            );
+        });
+    }
+
+    /**
      * Endpoint to retrieve a training path by its topic
      * Path: /api/training-paths/topic/:topic
      */
