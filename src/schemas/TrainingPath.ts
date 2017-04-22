@@ -25,7 +25,8 @@ export let TrainingPathSchema = new Schema({
     name:             { type: String, required: true },
     description:    { type: String, required: true },
     katas:          [{ type: Schema.Types.ObjectId, required: false, ref: 'katas' }],
-    enabled:        { type: Boolean, required: true, default: true }
+    enabled:        { type: Boolean, required: true, default: true },
+    createdAt:      { type: Date, default: new Date() }
 }, {
     timestamps: {
         createdAt: 'createdAt',
