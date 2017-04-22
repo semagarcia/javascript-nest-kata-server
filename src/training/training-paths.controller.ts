@@ -7,6 +7,17 @@ export class TrainingPathsController {
     constructor(private trainingSrv: TrainingService) {}
 
     /**
+     * Endpoint to create a new training path
+     * Path: [POST] /api/training-paths
+     */
+    @RequestMapping({ path: '', method: RequestMethod.POST })
+    async createNewTrainingPath(req, res) { 
+        let { topic, name, description } = req.body;
+        let newTP = await this.trainingSrv.createNewTrainingPath(topic, name, description);
+        res.send({ created: newTP });
+    }
+
+    /**
      * Endpoint to retrieve all the training paths (without katas)
      * Path: /api/training-paths
      */

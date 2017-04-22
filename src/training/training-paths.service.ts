@@ -8,6 +8,24 @@ export class TrainingService {
 
     private trainingPaths: Array<TrainingPath>;
 
+    createNewTrainingPath(topic: string, name: string, description: string) {
+        return new Promise((resolve, reject) => {
+            let newTrainingPath = new TrainingPathModel({
+                topic: topic, 
+                name: name, 
+                description: description
+            });
+            newTrainingPath.save((err) => {
+                if(err) { 
+                    console.log(err); 
+                    reject(err); 
+                } else {
+                    resolve(newTrainingPath);
+                }
+            });
+        });
+    }
+
     /**
      * Endpoint to retrieve all the training paths (without katas)
      * Path: /api/training-paths
