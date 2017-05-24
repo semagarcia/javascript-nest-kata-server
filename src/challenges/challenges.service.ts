@@ -1,5 +1,6 @@
 import { Component } from 'nest.js';
 import { Challenge } from './challenge.model';
+const uuidV4 = require('node-uuid');
 
 @Component()
 export class ChallengesService {
@@ -14,8 +15,10 @@ export class ChallengesService {
         return Promise.resolve(this.challengesInfo.get(challengeId));
     }
 
-    createNewChallenge(challengeId: string, playerId: string) {
-        this.challengesInfo.set(challengeId, new Challenge(challengeId, playerId));
+    createNewChallenge(playerId: string, direction: string, duration: number, mode: string, event: string): Promise<string> {
+        let challengeUUID = uuidV4().slice(0, 8);  // Save only the first 8 characters
+        this.challengesInfo.set(challengeUUID, new Challenge(challengeUUID, playerId, direction, duration, mode, event));
+        return Promise.resolve(challengeUUID);
     }
 
     checkChallengeId(challengeId:string): Promise<boolean> {
