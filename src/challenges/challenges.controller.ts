@@ -1,6 +1,5 @@
 import { RequestMethod, Controller, RequestMapping } from 'nest.js';
 import { ChallengesService } from './challenges.service';
-const uuidV4 = require('node-uuid');
 
 @Controller({ path: 'api/challenges' })
 export class ChallengesController {
@@ -24,9 +23,13 @@ export class ChallengesController {
     // Path: /api/challenges/create
     @RequestMapping({ path: 'create', method: RequestMethod.POST })
     async createChallengeId(req, res) { 
-        let uuid = uuidV4();
-        await this.challengeSrv.createNewChallenge(uuid, req.body.playerId);
-        res.send({ uuid: uuid });
+        if(req.body.playerId, req.body.direction && req.body.duration && req.body.mode) {
+            let uuid = await this.challengeSrv.createNewChallenge(
+                req.body.playerId, req.body.direction, req.body.duration, req.body.mode, req.session.event);
+            res.send({ uuid: uuid });
+        } else {
+            res.status(500).send('Minimum fields not filled');
+        }
     }
 
     // Path: /api/challenges/check-challenge-id/:challengeId
