@@ -3,6 +3,7 @@ import { Module, MiddlewareBuilder, RequestMethod } from 'nest.js';
 import { AdministrationModule } from './administration';
 import { ChallengesModule } from './challenges';
 import { CoreModule, CorsMiddleware } from './core';
+import { EventsModule } from './events';
 import { IndividualKataModule } from './individual';
 import { KatasModule } from './katas';
 import { LoginModule } from './login';
@@ -16,6 +17,7 @@ import { UserModule } from './user';
         AdministrationModule,
         ChallengesModule,
         CoreModule,
+        EventsModule,
         IndividualKataModule,
         KatasModule,
         LoginModule,
