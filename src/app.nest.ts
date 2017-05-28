@@ -1,7 +1,9 @@
 import { NestApplication } from 'nest.js';
 const session = require('express-session');
+const expressJwt = require('express-jwt');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
+const config = require('./config.json');
 
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
@@ -15,12 +17,16 @@ export class Application implements NestApplication {
         this.expressApp.use(bodyParser.json());
         this.expressApp.use(cors());
         this.expressApp.use(session({ 
-            secret: 'JSDayES-2017-event',
+            secret: config.secretExpress,
             store: new MongoStore({
                 mongooseConnection: mongoose.connection,
                 autoRemove: 'disabled'
             })
         }));
+        this.expressApp.use(
+            expressJwt({ secret: config.secretJwt })
+                .unless({ path: ['/api/login', '/api/events', '/api/ranking', '/api/logout'] })
+        );
     }
 
     start(): void {
