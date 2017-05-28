@@ -1,7 +1,7 @@
 import { RequestMethod, Controller, RequestMapping } from 'nest.js';
+
 import { LoginService } from './login.component';
 import { StreamingGateway } from './../core';
-
 import { KataModel, Kata } from './../schemas/Kata';
 import { TrainingPathModel } from './../schemas/TrainingPath';
 
@@ -11,12 +11,19 @@ export class LoginController {
     constructor(private loginSrv:LoginService, private streamingSrv:StreamingGateway) {}
 
     @RequestMapping({ path: 'login', method: RequestMethod.POST })
-    login(req, res) {
-        let session = req.session;
-        session.username = req.body.user;
-        session.email = req.body.email;
-        session.event = req.body.event;
-        res.status(200).json({ user: session.username, email: session.email, event: session.event });
+    async login(req, res) {
+        await this.loginSrv.standardLogin(req.body.user, req.body.password)
+            .then((user: any) => {
+                let session = req.session;
+                session.username = req.body.user;
+                //session.email = req.body.email;
+                session.event = req.body.event;
+                user.event = req.body.event;
+                res.status(200).json({ user: user });
+            })
+            .catch(err => {
+                res.status(401).send();
+            });
     }
 
     @RequestMapping({ path: 'session', method: RequestMethod.GET })
