@@ -1,46 +1,98 @@
 import { Component } from 'nest.js';
-import { Challenge } from './challenge.model';
+import { IndividualKataService } from './../individual/individual.component';
+import { Challenge, ChallengeModel } from './../schemas/Challenge';
 const uuidV4 = require('node-uuid');
+const moment = require('moment');
 
 @Component()
 export class ChallengesService {
 
     private challengesInfo: Map<string, Challenge> = new Map<string, Challenge>();
 
+    constructor(private individualKataSrv: IndividualKataService) {}
+
     getChallenges(): Promise<Map<string, Challenge>> {
-        return Promise.resolve(this.challengesInfo);
+        return new Promise((resolve, reject) => {
+            ChallengeModel.find({ 
+                'created_at': { 
+                    '$gte': moment().subtract(24, 'hours').toDate() 
+                } 
+            }).exec((err, challenges) => {
+                if(err) reject(err);
+                resolve(challenges)
+            });
+        });
     }
 
     getChallenge(challengeId: string): Promise<Challenge> {
-        return Promise.resolve(this.challengesInfo.get(challengeId));
+        return new Promise((resolve, reject) => {
+            ChallengeModel.findById({ _id: challengeId }, {}, (err, challenge) => {
+                if(err) reject(err);
+                resolve((challenge) ? challenge : {});
+            });
+        });
     }
 
     createNewChallenge(playerId: string, direction: string, duration: number, mode: string, event: string): Promise<string> {
-        let challengeUUID = uuidV4().slice(0, 8);  // Save only the first 8 characters
-        this.challengesInfo.set(challengeUUID, new Challenge(challengeUUID, playerId, direction, duration, mode, event));
-        return Promise.resolve(challengeUUID);
+        return new Promise((resolve, reject) => {
+            let challengeUUID = uuidV4().slice(0, 8);  // Save only the first 8 characters
+            ChallengeModel.create({
+                challengeId: challengeUUID,
+                direction: direction,
+                duration: duration,
+                mode: mode,
+                event: event,
+                creator: playerId
+            }, (err, challenge) => {
+                if(err) reject(err);
+                resolve(challengeUUID);
+            })
+        });
     }
 
     checkChallengeId(challengeId:string): Promise<boolean> {
-        return Promise.resolve(this.challengesInfo.has(challengeId));
+        return new Promise((resolve, reject) => {
+            ChallengeModel.findOne({}, {}, (err, challenge) => {
+                if(err) reject(err);
+                resolve(true);
+            });
+        });
     }
 
     joinPlayerIntoChallenge(challengeId: string, playerId: string) {
-        let challenge = this.challengesInfo.get(challengeId);
-        if(!challenge.playerA && !challenge.playerB) {
-            // Nobody has joined into challenge
-            challenge.playerA = playerId;
-            this.challengesInfo.set(challengeId, challenge);
-        } else if(challenge.playerA && !challenge.playerB) {
-            // Only playerA has joined into challenge
-            challenge.playerB = playerId;
-            this.challengesInfo.set(challengeId, challenge);
-        } else if(challenge.playerA && challenge.playerB) {
-            // Both players have joined into challenge
-            console.log('JoinPlayer :: No more players allowed => Exception');
-            // Throw exception
-        }
-        return Promise.resolve(challenge);
+        return new Promise((resolve, reject) => {
+            ChallengeModel.findById(challengeId, (err, challenge) => {
+                console.log('err: ', err);
+                if(err) reject(err);
+                if(challenge && challenge.status !== 'WAITING') {
+                    // Playing or not valid challenge (expired or ended); please, create a new one
+                    console.log('playing or not valid challenge');
+                    reject(false);
+                } else if(challenge && challenge.status === 'WAITING' && !challenge.playerA) {  
+                    challenge.status = 'WAITING';
+                    challenge.playerA = playerId;
+                    console.log('PlayerA joined');
+                    this.saveChallengeUpdate(challenge, resolve, reject);
+                } else if(challenge && challenge.status === 'WAITING' && challenge.playerA && !challenge.playerB) {
+                    // Allow more than one player??????????????
+                    challenge.status = 'PLAYING';
+                    challenge.playerB = playerId;
+                    console.log('PlayerB joined');
+                    this.saveChallengeUpdate(challenge, resolve, reject);
+                } else 
+                    reject(false);
+            })
+        });
+    }
+
+    private saveChallengeUpdate(c, rs, rj) {
+        c.save((err, c, nRows) => {
+            if(err) rj(err);
+            if(c && nRows === 1) 
+                rs(true);
+            else 
+                rs(false);
+        });
     }
 
 }

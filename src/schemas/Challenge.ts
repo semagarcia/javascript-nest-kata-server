@@ -9,12 +9,11 @@ export interface Challenge extends Document {
     event: string;
     creator: string;
     playerA: string;
-    namePlayerA: string;
-    playerB: string;
-    namePlayerB: string;
-    timestamp: Date;
-    status: 'WAITING', 'PLAYING', 'ENDED';
-    result: string;
+    namePlayerA?: string;
+    playerB?: string;
+    namePlayerB?: string;
+    status: 'WAITING' | 'PLAYING' | 'ENDED' | 'EXPIRED';
+    result?: string;
 
 }
 
@@ -23,15 +22,14 @@ export let ChallengeSchema = new Schema({
     direction:          { type: String, required: true },
     duration:           { type: String, required: true },
     mode:               { type: String, required: true },
-    event:              { type: String, required: true },
+    event:              { type: String, required: false },
     creator:            { type: String, required: true },
-    playerA:            { type: String, required: true },
-    namePlayerA:        { type: String, required: true },
-    playerB:            { type: String, required: true },
-    namePlayerB:        { type: String, required: true },
-    timestamp:          { type: Date, required: true },
-    status:             { type: String, required: true },
-    result:             { type: String, required: true }
-});
+    playerA:            { type: String, required: false },
+    namePlayerA:        { type: String, required: false },
+    playerB:            { type: String, required: false },
+    namePlayerB:        { type: String, required: false },
+    status:             { type: String, default: 'WAITING', required: false },
+    result:             { type: String, required: false }
+}, { timestamps: true });
 
 export const ChallengeModel: Model<Challenge> = model<Challenge>('challenges', ChallengeSchema);
