@@ -9,9 +9,9 @@ export interface Challenge extends Document {
     event: string;
     creator: string;
     playerA: string;
-    namePlayerA?: string;
+    usernamePlayerA?: string;
     playerB?: string;
-    namePlayerB?: string;
+    usernamePlayerB?: string;
     status: 'WAITING' | 'PLAYING' | 'ENDED' | 'EXPIRED';
     result?: string;
 
@@ -25,9 +25,9 @@ export let ChallengeSchema = new Schema({
     event:              { type: String, required: false },
     creator:            { type: String, required: true },
     playerA:            { type: String, required: false },
-    namePlayerA:        { type: String, required: false },
+    usernamePlayerA:    { type: String, required: false },
     playerB:            { type: String, required: false },
-    namePlayerB:        { type: String, required: false },
+    usernamePlayerB:    { type: String, required: false },
     status:             { type: String, default: 'WAITING', required: false },
     result:             { type: String, required: false }
 }, { timestamps: true });
