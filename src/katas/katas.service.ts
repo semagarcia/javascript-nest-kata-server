@@ -12,9 +12,21 @@ export class KatasService {
      */
     async getAllKatas() {
         return new Promise((resolve, reject) => {
-            KataModel.find({ enabled: true}).exec((err, katas) => {
+            KataModel.find({ enabled: true }).exec((err, katas) => {
                 if(err) reject(err);
                 resolve(katas);
+            });
+        });
+    }
+
+    /**
+     * Endpoint to retrieve a kata
+     */
+    async getKataById(kataId: string) {
+        return new Promise((resolve, reject) => {
+            KataModel.findById({ _id: kataId, enabled: true }).exec((err, kata) => {
+                if(err) reject(err);
+                resolve(kata);
             });
         });
     }
