@@ -23,7 +23,7 @@ export class ChallengesController {
     // Path: /api/challenges/create
     @RequestMapping({ path: 'create', method: RequestMethod.POST })
     async createChallengeId(req, res) { 
-        if(req.body.playerId, req.body.direction && req.body.duration && req.body.mode) {
+        if(req.body.playerId, req.body.direction && req.body.duration >= 0 && req.body.mode) {
             let uuid = await this.challengeSrv.createNewChallenge(
                 req.body.playerId, req.body.direction, req.body.duration, req.body.mode, req.session.event);
             res.send({ uuid: uuid });
@@ -42,7 +42,7 @@ export class ChallengesController {
     // Path: /api/challenges/join
     @RequestMapping({ path: 'join', method: RequestMethod.POST })
     async joinToChallengeRoom(req, res) { 
-        let challenge = await this.challengeSrv.joinPlayerIntoChallenge(req.body.challengeId, req.body.playerId);
+        let challenge = await this.challengeSrv.joinPlayerIntoChallenge(req.body.challengeId, req.body.username, req.body.playerId);
         res.send(challenge);
     }
 
