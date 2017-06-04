@@ -1,7 +1,7 @@
 import { Module } from 'nest.js';
 import { ChallengesController } from './challenges.controller';
 import { ChallengesService } from './challenges.service';
-import { IndividualKataService } from './../individual/individual.component';
+import { IndividualKataService } from './../individual';
 
 @Module({
     controllers: [ ChallengesController ],
