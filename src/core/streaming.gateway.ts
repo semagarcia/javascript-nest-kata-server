@@ -1,7 +1,6 @@
 import { SocketGateway, NestGateway, GatewayServer, SubscribeMessage } from 'nest.js/socket';
 
-@SocketGateway({ port: 5000 })
-//@SocketGateway({ port: 81, namespace: 'users' })
+@SocketGateway({ port: 5000 /*, namespace: 'users' */ })
 export class StreamingGateway implements NestGateway {
     @GatewayServer server: SocketIO.Server;
 
@@ -13,42 +12,42 @@ export class StreamingGateway implements NestGateway {
 
     @SubscribeMessage({ value: 'msg' })
     onMsg(sender: SocketIO.Socket, data) {
-        console.log('Data (msg): ', data);
-
         sender.emit('msg', { sender:sender.id, ts:new Date().toString(), who:'sender.emit' });
         this.server.emit('msg', { sender:sender.id, ts:new Date().toString(), who:'server.emit' });
-        this.server.send('msg', { sender:sender.id, ts:new Date().toString(), who:'server.emit' });
-        this.server.emit('msg2', { who:'onMsg - msg2' });
     }
 
     @SubscribeMessage({ value: 'message' })
-    onMessage(sender: SocketIO.Socket, data) {}
-
-    @SubscribeMessage({ value: 'start-streaming' })
-    onStartStreaming(sender: SocketIO.Socket, data) {
-        sender.join(data);  // ---> Use //@SocketGateway({ port: 5000, namespace: 'users' })
+    onMessage(sender: SocketIO.Socket, data) {
+        console.log('onMessage: ', data);
     }
 
-    @SubscribeMessage({ value: 'code' })
+    @SubscribeMessage({ value: 'challenge' })
     onUpdatedCodeInChallengeMode(sender: SocketIO.Socket, data) {
-        sender.broadcast.to(data.challengeId).emit('code', {
-            code: data.code,
-            who: data.player
-        });
+        if(data.event === 'joinToChallenge') {
+            // Join user into "streaming" room
+            sender.join(data.challengeId);
+        } else if(data.event === 'codeUpdated') {
+            sender.broadcast.to(data.challengeId).emit('challenge', {
+                event: data.event,
+                code: data.code,
+                who: sender.id
+            });
+        } else if(data.event === 'playerReady') {
+            sender.broadcast.to(data.challengeId).emit('challenge', {
+                event: data.event,
+                playerName: data.playerName,
+                playerId: sender.id
+            });
+        }
+        //this.server.in(data.challengeId).emit('challenge', {});
+    }
 
-
-
-
-        // Llamar al servicio donde están todos los challenges (inject dependency)
-        // Recuperar el elemento i-ésimo en función del challengeId
-        // Recuperar la lista de subscribers (socket viendo el streaming)
-        // Enviar a cada uno de ellos el código actualizado indicando si es el playerA o el playerB
-
-        
+    /*startSyncChallenge(challengeId, payload) {
+        this.server.in(challengeId).emit(payload);
     }
 
     sendMessage(type, payload) {
         this.server.emit(type, payload);
-    }
+    }*/
 
 }
