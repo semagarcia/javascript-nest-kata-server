@@ -8,6 +8,7 @@ export interface Challenge extends Document {
     mode: string;
     event: string;
     creator: string;
+    challengeKata: string;
     playerA: string;
     usernamePlayerA?: string;
     playerB?: string;
@@ -24,6 +25,7 @@ export let ChallengeSchema = new Schema({
     mode:               { type: String, required: true },
     event:              { type: String, required: false },
     creator:            { type: String, required: true },
+    challengeKata:            { type: String, required: true },
     playerA:            { type: String, required: false },
     usernamePlayerA:    { type: String, required: false },
     playerB:            { type: String, required: false },

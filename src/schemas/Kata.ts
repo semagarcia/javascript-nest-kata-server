@@ -3,6 +3,9 @@ import { Schema, Document, Model, model } from 'mongoose';
 export interface Kata extends Document {
 
     /** */
+    //_id?: string;
+
+    /** */
     name: string;
 
     /** */
@@ -12,22 +15,13 @@ export interface Kata extends Document {
     examples: Array<string>;
 
     /** */
-    initialBodyFunction: string;
+    inputs: Array<{parameter: string, description: string, type: string, constraints: Array<string>}>;
 
     /** */
-    rawkata: {
-        /** */
-        packageJson: string;
+    outputs: Array<{description: string, type: string, constraints: Array<string>}>;
 
-        /** */
-        readme: string;
-
-        /** */
-        tests: string;
-
-        /** */
-        hiddenTests: string;
-    };
+    /** */
+    initialBodyFunction: string;
 
     /** */
     enabled: boolean;
@@ -38,13 +32,18 @@ export let KataSchema = new Schema({
     name:                   { type: String, required: true },
     description:            { type: String, required: true },
     examples:               [{ type: String, required: true }],
+    inputs:                 [
+                                { parameter: { type: String, required: false } },
+                                { description: { type: String, required: false } },
+                                { type: { type: String, required: false } },
+                                { constraints: [{ type: String, required: false }] },
+    ],
+    outputs:                [
+                                { description: { type: String, required: false } },
+                                { type: { type: String, required: false } },
+                                { constraints: [{ type: String, required: false }] },
+    ],
     initialBodyFunction:    { type: String, required: true },
-    rawkata: {
-        packageJson:        { type: String, required: true },
-        readme:             { type: String, required: true },
-        tests:              { type: String, required: true },
-        hiddenTests:        { type: String, required: true }
-    },
     enabled:                { type: Boolean, required: true }
 });
 
