@@ -1,13 +1,12 @@
 import { Component } from 'nest.js';
-import { IndividualKataService } from './../individual/individual.component';
+import { IndividualKataService } from './../individual';
 import { Challenge, ChallengeModel } from './../schemas/Challenge';
+
 const uuidV4 = require('node-uuid');
 const moment = require('moment');
 
 @Component()
 export class ChallengesService {
-
-    private challengesInfo: Map<string, Challenge> = new Map<string, Challenge>();
 
     constructor(private individualKataSrv: IndividualKataService) {}
 
@@ -26,43 +25,51 @@ export class ChallengesService {
 
     getChallenge(challengeId: string): Promise<Challenge> {
         return new Promise((resolve, reject) => {
-            ChallengeModel.findById({ _id: challengeId }, {}, (err, challenge) => {
+            ChallengeModel.findOne({ challengeId: challengeId }, {}, (err, challenge) => {
                 if(err) reject(err);
                 resolve((challenge) ? challenge : {});
             });
         });
     }
 
-    createNewChallenge(playerId: string, direction: string, duration: number, mode: string, event: string): Promise<string> {
+    createNewChallenge(playerSocketId: string, direction: string, duration: number, mode: string, event: string): Promise<string> {
         return new Promise((resolve, reject) => {
             let challengeUUID = uuidV4().slice(0, 8);  // Save only the first 8 characters
-            ChallengeModel.create({
-                challengeId: challengeUUID,
-                direction: direction,
-                duration: duration,
-                mode: mode,
-                event: event,
-                creator: playerId
-            }, (err, challenge) => {
-                if(err) reject(err);
-                resolve(challengeUUID);
-            })
+            
+            this.individualKataSrv.getRandomIndividualKata()
+                .then((randomKata) => {
+                    ChallengeModel.create({
+                        challengeId: challengeUUID,
+                        direction: direction,
+                        duration: duration,
+                        mode: mode,
+                        event: event,
+                        creator: playerSocketId,
+                        challengeKata: randomKata._id
+                    }, (err, challenge) => {
+                        if(err) reject(err);
+                        resolve(challengeUUID);
+                    });
+                })
+                .catch((err) => { 
+                    console.log(`Error assigning kata for challenge (${err})`);
+                    reject(`Error assigning kata for challenge (${err})`);
+                });
         });
     }
 
     checkChallengeId(challengeId:string): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            ChallengeModel.findOne({}, {}, (err, challenge) => {
+            ChallengeModel.findOne({ challengeId: challengeId }, {}, (err, challenge) => {
                 if(err) reject(err);
                 resolve(true);
             });
         });
     }
 
-    joinPlayerIntoChallenge(challengeId: string, playerId: string) {
+    joinPlayerIntoChallenge(challengeId: string, username: string, playerId: string) {
         return new Promise((resolve, reject) => {
-            ChallengeModel.findById(challengeId, (err, challenge) => {
-                console.log('err: ', err);
+            ChallengeModel.findOne({ challengeId: challengeId }, (err, challenge) => {
                 if(err) reject(err);
                 if(challenge && challenge.status !== 'WAITING') {
                     // Playing or not valid challenge (expired or ended); please, create a new one
@@ -71,13 +78,16 @@ export class ChallengesService {
                 } else if(challenge && challenge.status === 'WAITING' && !challenge.playerA) {  
                     challenge.status = 'WAITING';
                     challenge.playerA = playerId;
+                    challenge.usernamePlayerA = username;
                     console.log('PlayerA joined');
                     this.saveChallengeUpdate(challenge, resolve, reject);
                 } else if(challenge && challenge.status === 'WAITING' && challenge.playerA && !challenge.playerB) {
                     // Allow more than one player??????????????
                     challenge.status = 'PLAYING';
                     challenge.playerB = playerId;
+                    challenge.usernamePlayerB = username;
                     console.log('PlayerB joined');
+                    //this.streamingGtw.startSyncChallenge(challenge.challengeId, 'playerB has joined into challenge');
                     this.saveChallengeUpdate(challenge, resolve, reject);
                 } else 
                     reject(false);
@@ -89,7 +99,7 @@ export class ChallengesService {
         c.save((err, c, nRows) => {
             if(err) rj(err);
             if(c && nRows === 1) 
-                rs(true);
+                rs(c);
             else 
                 rs(false);
         });
